@@ -69,6 +69,16 @@ app.use(cors());
 app.use(express.json());
 
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://fsrprfrontend.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
