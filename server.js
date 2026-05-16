@@ -65,19 +65,19 @@ setTimeout(() => {
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://fsrprfrontend.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://fsrprfrontend.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
 // routes
 app.use("/api/auth", authRoutes);
