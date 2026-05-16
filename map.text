@@ -1,0 +1,32 @@
+backend/
+│
+├── config/
+│   └── db.js
+│
+├── controllers/
+│   ├── authController.js
+│   ├── beneficiaryController.js
+│   └── activityController.js
+│
+├── models/
+│   ├── User.js
+│   ├── Beneficiary.js
+│   └── Activity.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── beneficiaryRoutes.js
+│   └── activityRoutes.js
+│
+├── middleware/
+│   ├── authMiddleware.js
+│   └── roleMiddleware.js
+│
+├── services/   # (optional but pro)
+│   └── analyticsService.js
+│
+├── utils/
+│   └── helpers.js
+│
+├── app.js
+└── server.js
