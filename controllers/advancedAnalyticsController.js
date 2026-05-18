@@ -258,7 +258,18 @@ import Expenditure from "../models/Expenditure.js";
 
 export const getAdvancedDashboardAnalytics = async (req, res) => {
   try {
-    const workplans = await Workplan.find().populate("component", "code name");
+  const { year } = req.query;
+
+const workplanFilter = {};
+
+if (year) {
+  workplanFilter.workplan_year = Number(year);
+}
+
+const workplans = await Workplan.find(workplanFilter).populate(
+  "component",
+  "code name"
+);
 
     const activities = await Activity.find().populate("component", "code name");
 
@@ -271,9 +282,16 @@ export const getAdvancedDashboardAnalytics = async (req, res) => {
       "code name"
     );
 
-    const expenditures = await Expenditure.find({
-      statusApproval: { $ne: "rejected" },
-    });
+    // const expenditures = await Expenditure.find({
+    //   statusApproval: { $ne: "rejected" },
+    // });
+
+    const workplanIds = workplans.map((w) => w._id);
+
+const expenditures = await Expenditure.find({
+  workplan: { $in: workplanIds },
+  statusApproval: { $ne: "rejected" },
+});
 
     const totalBudget = workplans.reduce(
       (sum, item) => sum + Number(item.milestone_total_budget || 0),
