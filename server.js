@@ -52,6 +52,7 @@ import gisAnalyticsRoutes from "./routes/gisAnalyticsRoutes.js";
 import alertRoutes from "./routes/alertRoutes.js";
 import workplanRoutes from "./routes/workplanRoutes.js";
 import advancedAnalyticsRoutes from "./routes/advancedAnalyticsRoutes.js";
+import expenditureRoutes from "./routes/expenditureRoutes.js";
 import path from "path";
 
 
@@ -129,6 +130,7 @@ app.use("/api", gisAnalyticsRoutes);
 app.use("/api", alertRoutes);
 app.use("/api/workplans", workplanRoutes);
 app.use("/api/advanced-analytics", advancedAnalyticsRoutes);
+app.use("/api/expenditures", expenditureRoutes);
 
 // images
 app.use("/uploads", express.static("uploads"));
