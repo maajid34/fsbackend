@@ -422,7 +422,15 @@ const workplanSchema = new mongoose.Schema(
 
     quarter: {
       type: String,
-      enum: ["Q1", "Q2", "Q3", "Q4", "Q1-Q2", "Q2-Q3", "Q3-Q4", "Q1-Q4"],
+      enum: ["Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "Q1-Q2",
+    "Q1-Q3",
+    "Q2-Q3",
+    "Q3-Q4",
+    "Q1-Q4",],
       // required: true,
     },
 
