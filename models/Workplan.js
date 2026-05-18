@@ -457,6 +457,13 @@ const workplanSchema = new mongoose.Schema(
       trim: true,
     },
 
+    workplan_year: {
+  type: Number,
+  required: true,
+  min: 2021,
+  max: 2030,
+  default: 2026,
+},
     status: {
       type: String,
       enum: ["planned", "ongoing", "completed", "delayed"],

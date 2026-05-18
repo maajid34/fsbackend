@@ -506,6 +506,7 @@ export const createWorkplan = async (req, res) => {
 
     const data = {
       ...req.body,
+       workplan_year: Number(req.body.workplan_year || 2026),
       activity_subactivities: subactivities,
       milestone_total_budget: calculateMilestoneBudget(subactivities),
       createdBy: req.user._id,
@@ -523,9 +524,38 @@ export const createWorkplan = async (req, res) => {
   }
 };
 
+// export const getWorkplans = async (req, res) => {
+//   try {
+//     const { quarter, component } = req.query;
+
+//     const filter = {};
+
+//     if (quarter) {
+//       filter.quarter = quarter;
+//     }
+
+//     if (component) {
+//       filter.component = component;
+//     }
+
+//     const workplans = await populateWorkplan(
+//       Workplan.find(filter).sort({
+//         workplan_no: 1,
+//         createdAt: -1,
+//       })
+//     );
+
+//     res.json(workplans);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// };
+
 export const getWorkplans = async (req, res) => {
   try {
-    const { quarter, component } = req.query;
+    const { quarter, component, year } = req.query;
 
     const filter = {};
 
@@ -537,8 +567,13 @@ export const getWorkplans = async (req, res) => {
       filter.component = component;
     }
 
+    if (year) {
+      filter.workplan_year = Number(year);
+    }
+
     const workplans = await populateWorkplan(
       Workplan.find(filter).sort({
+        workplan_year: -1,
         workplan_no: 1,
         createdAt: -1,
       })
@@ -590,6 +625,7 @@ export const updateWorkplan = async (req, res) => {
 
     const data = {
       ...req.body,
+      workplan_year: Number(req.body.workplan_year || 2026),
       activity_subactivities: subactivities,
       milestone_total_budget: calculateMilestoneBudget(subactivities),
     };
