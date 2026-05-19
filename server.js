@@ -71,15 +71,30 @@ const app = express();
 app.use(express.json());
 
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://fsrprfrontend.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+// app.use(cors({
+//   origin: [
+//     "http://localhost:5173",
+//     "https://fsrprfrontend.vercel.app"
+//   ],
+//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   credentials: true
+// }));
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://fsrprfrontend.vercel.app",
+      "https://hilaactech.net",
+      "https://www.hilaactech.net",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 // routes
 app.use("/api/auth", authRoutes);
