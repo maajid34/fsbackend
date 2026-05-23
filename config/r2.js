@@ -16,6 +16,9 @@
 // export default s3;
 
 import { S3Client } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+dotenv.config();
+
 
 console.log("R2 ENDPOINT:", process.env.R2_ENDPOINT);
 console.log("R2 ACCESS KEY:", process.env.R2_ACCESS_KEY_ID);
