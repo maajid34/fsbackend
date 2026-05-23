@@ -1,6 +1,9 @@
 import Evidence from "../models/Evidence.js";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import mongoose from "mongoose";
 import s3 from "../config/r2.js";
+
+const escapeRegex = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const getR2KeyFromEvidence = (file) => {
   if (!file?.file_name) return "";
@@ -23,7 +26,7 @@ export const getEvidenceFiles = async (req, res) => {
 
     const filter = {};
 
-    if (module) filter.module = module;
+    if (module) filter.module = new RegExp(`^${escapeRegex(module)}$`, "i");
     if (related_id) filter.related_id = related_id;
 
     const files = await Evidence.find(filter)
@@ -55,16 +58,24 @@ export const getEvidenceCounts = async (req, res) => {
       return res.json({});
     }
 
+    const objectIds = relatedIds
+      .filter((id) => mongoose.Types.ObjectId.isValid(id))
+      .map((id) => new mongoose.Types.ObjectId(id));
+
+    if (objectIds.length === 0) {
+      return res.json({});
+    }
+
     const counts = await Evidence.aggregate([
       {
         $match: {
-          module,
-          related_id: { $in: relatedIds },
+          module: new RegExp(`^${escapeRegex(module)}$`, "i"),
+          related_id: { $in: objectIds },
         },
       },
       {
         $group: {
-          _id: "$related_id",
+          _id: { $toString: "$related_id" },
           count: { $sum: 1 },
         },
       },
