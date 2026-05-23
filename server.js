@@ -54,6 +54,7 @@ import workplanRoutes from "./routes/workplanRoutes.js";
 import advancedAnalyticsRoutes from "./routes/advancedAnalyticsRoutes.js";
 import expenditureRoutes from "./routes/expenditureRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import evidenceRoutes from "./routes/evidenceRoutes.js";
 import path from "path";
 
 
@@ -148,6 +149,8 @@ app.use("/api/workplans", workplanRoutes);
 app.use("/api/advanced-analytics", advancedAnalyticsRoutes);
 app.use("/api/expenditures", expenditureRoutes);
 app.use("/api/uploads", uploadRoutes);
+app.use("/api/evidence", evidenceRoutes);
+
 
 // images
 app.use("/uploads", express.static("uploads"));
