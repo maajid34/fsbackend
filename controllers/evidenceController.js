@@ -1,4 +1,21 @@
 import Evidence from "../models/Evidence.js";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import s3 from "../config/r2.js";
+
+const getR2KeyFromEvidence = (file) => {
+  if (!file?.file_name) return "";
+
+  if (file.file_name.startsWith("evidence/")) {
+    return file.file_name;
+  }
+
+  try {
+    const pathName = new URL(file.file_url).pathname;
+    return decodeURIComponent(pathName.replace(/^\/+/, ""));
+  } catch {
+    return file.file_name;
+  }
+};
 
 export const getEvidenceFiles = async (req, res) => {
   try {
@@ -89,13 +106,26 @@ export const downloadEvidenceFile = async (req, res) => {
 
 export const deleteEvidenceFile = async (req, res) => {
   try {
-    const file = await Evidence.findByIdAndDelete(req.params.id);
+    const file = await Evidence.findById(req.params.id);
 
     if (!file) {
       return res.status(404).json({
         message: "Evidence file not found",
       });
     }
+
+    const key = getR2KeyFromEvidence(file);
+
+    if (key && process.env.R2_BUCKET_NAME) {
+      await s3.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.R2_BUCKET_NAME,
+          Key: key,
+        })
+      );
+    }
+
+    await file.deleteOne();
 
     res.json({
       message: "Evidence file deleted successfully",

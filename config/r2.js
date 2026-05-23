@@ -1,27 +1,6 @@
-// import { S3Client } from "@aws-sdk/client-s3";
-
-// const s3 = new S3Client({
-//   region: "auto",
-
-//   endpoint: process.env.R2_ENDPOINT,
-
-//   credentials: {
-//     accessKeyId: process.env.R2_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-//   },
-  
-// });
-
-
-// export default s3;
-
 import { S3Client } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
 dotenv.config();
-
-
-console.log("R2 ENDPOINT:", process.env.R2_ENDPOINT);
-console.log("R2 ACCESS KEY:", process.env.R2_ACCESS_KEY_ID);
 
 const s3 = new S3Client({
   region: "auto",
@@ -33,7 +12,5 @@ const s3 = new S3Client({
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
   },
 });
-
-console.log("R2 CLIENT INITIALIZED SUCCESSFULLY");
 
 export default s3;
