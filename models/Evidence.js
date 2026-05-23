@@ -34,6 +34,10 @@ const evidenceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    related_name: {
+  type: String,
+  default: "",
+},
 
     related_id: {
       type: mongoose.Schema.Types.ObjectId,
