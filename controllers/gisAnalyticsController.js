@@ -18,11 +18,11 @@ export const getGISAnalytics = async (req, res) => {
       });
 
       const activities = await Activity.countDocuments({
-        location: location._id,
+        locations: location._id,
       });
 
       const completedActivities = await Activity.countDocuments({
-        location: location._id,
+        locations: location._id,
         status: "completed",
       });
 
