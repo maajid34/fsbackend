@@ -42,6 +42,51 @@ export const getEvidenceFileById = async (req, res) => {
   }
 };
 
+export const downloadEvidenceFile = async (req, res) => {
+  try {
+    const file = await Evidence.findById(req.params.id);
+
+    if (!file) {
+      return res.status(404).json({
+        message: "Evidence file not found",
+      });
+    }
+
+    const response = await fetch(file.file_url);
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        message: "Failed to download evidence file",
+      });
+    }
+
+    const contentType =
+      response.headers.get("content-type") ||
+      file.mime_type ||
+      "application/octet-stream";
+    const safeName = (file.original_name || file.file_name || "evidence-file")
+      .replace(/[\r\n"]/g, "")
+      .trim();
+
+    res.setHeader("Content-Type", contentType);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${safeName}"`
+    );
+
+    if (file.size) {
+      res.setHeader("Content-Length", file.size);
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const deleteEvidenceFile = async (req, res) => {
   try {
     const file = await Evidence.findByIdAndDelete(req.params.id);
