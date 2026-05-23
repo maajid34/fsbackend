@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getEvidenceFiles,
+  getEvidenceCounts,
   getEvidenceFileById,
   downloadEvidenceFile,
   deleteEvidenceFile,
@@ -11,6 +12,8 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/", protect, getEvidenceFiles);
+
+router.get("/counts", protect, getEvidenceCounts);
 
 router.get("/:id/download", protect, downloadEvidenceFile);
 

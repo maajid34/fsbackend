@@ -38,6 +38,51 @@ export const getEvidenceFiles = async (req, res) => {
   }
 };
 
+export const getEvidenceCounts = async (req, res) => {
+  try {
+    const { module, related_ids } = req.query;
+
+    if (!module || !related_ids) {
+      return res.json({});
+    }
+
+    const relatedIds = String(related_ids)
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    if (relatedIds.length === 0) {
+      return res.json({});
+    }
+
+    const counts = await Evidence.aggregate([
+      {
+        $match: {
+          module,
+          related_id: { $in: relatedIds },
+        },
+      },
+      {
+        $group: {
+          _id: "$related_id",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const countMap = counts.reduce((map, item) => {
+      map[item._id] = item.count;
+      return map;
+    }, {});
+
+    res.json(countMap);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const getEvidenceFileById = async (req, res) => {
   try {
     const file = await Evidence.findById(req.params.id).populate(
